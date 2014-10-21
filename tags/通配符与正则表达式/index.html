@@ -3,17 +3,17 @@
 <head>
   <meta charset="utf-8">
   
-  <title>test | Hexo</title>
+  <title>Tag: 通配符与正则表达式 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="hello word">
-<meta property="og:type" content="article">
-<meta property="og:title" content="test">
-<meta property="og:url" content="http://yoursite.com/2014/10/20/test/">
+  <meta name="description">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://yoursite.com/tags/通配符与正则表达式/">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="hello word">
+<meta property="og:description">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="test">
-<meta name="twitter:description" content="hello word">
+<meta name="twitter:title" content="Hexo">
+<meta name="twitter:description">
 
   
     <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
@@ -61,10 +61,12 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-test" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main">
+  
+    <article id="post-通配符与正则表达式" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2014/10/20/test/" class="article-date">
-  <time datetime="2014-10-20T13:06:41.000Z" itemprop="datePublished">Oct 20 2014</time>
+    <a href="/2014/10/21/通配符与正则表达式/" class="article-date">
+  <time datetime="2014-10-21T11:00:53.000Z" itemprop="datePublished">Oct 21 2014</time>
 </a>
     
   </div>
@@ -74,8 +76,8 @@
       <header class="article-header">
         
   
-    <h1 class="article-title" itemprop="name">
-      test
+    <h1 itemprop="name">
+      <a class="article-title" href="/2014/10/21/通配符与正则表达式/">通配符与正则表达式</a>
     </h1>
   
 
@@ -83,40 +85,57 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>hello word</p>
+        <h1 id="1_通配符">1 通配符</h1>
+<ul>
+<li>通配符是系统级别的 ⽽而正则表达式需要相关⼯工具和语⾔的支持: egrep, awk, vi, perl。</li>
+<li>*当您键入 ls .txt 命令并按 Enter 后,寻找哪些文件同 .txt 模式相匹配的任务不是由 ls 命令,而 是由 shell 自己完成。这需要对命令行是如何被 shell 解析的作进一步解释。当您键入:</li>
+</ul>
+<h2 id="1-1通配符语法:*￼￼">1.1通配符语法:*￼￼</h2>
+<ul>
+<li><p>*将与零个或多个字符匹配。这就是说“什么都可以”。例子:</p>
+<pre><code>  /etc/g<span class="keyword">*</span> 与 /etc 中以 g 开头的所有⽂文件匹配。
+  /tmp/my<span class="keyword">*</span>.txt 与 /tmp 中以 my 开头,并且以 .txt 结尾的所有⽂文件匹配。
+</code></pre></li>
+<li><p>该命令首先被分割成一系列单词(本例中的 ls 和 .txt)。当 shell 在某个单词中发现了 ,它会将 整个单词当作通配模式解析,并用所有相匹配的文件替换它。因此,该命令在执行前就变为 ls readme.txt recipe.txt,而这将得到期望的结果。</p>
+</li>
+</ul>
+<h2 id="1-2通配符语法:?">1.2通配符语法:?</h2>
+<ul>
+<li><p>? 与任何单个字符匹配。例子:</p>
+<pre><code>  myfile? 与⽂文件名为 myfile 后跟单个字符的任何⽂文件匹配。
+  <span class="regexp">/tmp/</span>notes?txt 将与 <span class="regexp">/tmp/</span>notes.txt 和 <span class="regexp">/tmp/</span>notes_txt 都匹配,如果它们存在。
+</code></pre></li>
+</ul>
+<h2 id="1-3通配符语法:[]_[!]">1.3通配符语法:[] [!]</h2>
+<ul>
+<li>该通配符与 ? 相似,但允许指定得更确切。要使用该通配符,把您想要匹配的所有字符放在 [] 内。结果的表达式将与 [] 中任一字符相匹配。您也可以用 - 来指定范围,甚至还可以组合范 围。</li>
+<li>[…]:同方括号中的任意一个字符相匹配。这些字符可以用字符范围(比如 1-9)或者离散值或同 时使用两者表示。例如:[a-zBE5-7] 同所有 a 到 z 之间的字符和 B、E、5、6、7 相匹配。</li>
+<li>[!…]:与所有不在方括号中的某个字符匹配。例如 [!a-z] 同某个非小写字母相匹配[5];例子:</li>
+</ul>
+<pre><code>    ￼myfile[<span class="number">12</span>] 将与 myfile1 和 myfile2 匹配。只要当前⺫⽬目录中⾄至少有⼀一个这样的⽂文件存在,该通 配符就可以进⾏行扩展。
+    <span class="keyword">ls</span> /etc/[<span class="number">0</span>-<span class="number">9</span>]* 将列出 /etc 中以数字开头的所有⽂文件。
+    <span class="keyword">ls</span> /tmp/[A-Za-<span class="keyword">z</span>]* 将列出 /tmp 中以⼤大写字⺟母或⼩小写字⺟母开头的所有⽂文件
+    rm myfile[!<span class="number">9</span>] 将删除除 myfile9 之外的名为 myfile 加⼀一个字符的所有⽂文件。
+</code></pre><ul>
+<li>{c1,c2}:同 c1 或者 c2 相匹配。其中 c1 和 c2 也是通配符。因此,您可以使用 {[0-9]*,[acr]}。</li>
+</ul>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/10/20/test/" data-id="g03gzy0xfc2pe3n6" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2014/10/21/通配符与正则表达式/" data-id="tnfbgzr6xd3c2f2r" class="article-share-link">Share</a>
       
       
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/通配符与正则表达式/">通配符与正则表达式</a></li></ul>
+
     </footer>
   </div>
   
-    
-<nav id="article-nav">
-  
-    <a href="/2014/10/20/object-c中谓词的使用/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          (no title)
-        
-      </div>
-    </a>
-  
-  
-    <a href="/2014/10/20/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">Hello World</div>
-    </a>
-  
-</nav>
-
-  
 </article>
 
+
+  
+  
 </section>
         
           <aside id="sidebar">
