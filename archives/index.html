@@ -63,10 +63,10 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-通配符与正则表达式" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Object-C之属性-Property" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2014/10/21/通配符与正则表达式/" class="article-date">
-  <time datetime="2014-10-21T11:00:53.000Z" itemprop="datePublished">Oct 21 2014</time>
+    <a href="/2014/10/23/Object-C之属性-Property/" class="article-date">
+  <time datetime="2014-10-23T12:05:48.000Z" itemprop="datePublished">Oct 23 2014</time>
 </a>
     
   </div>
@@ -77,7 +77,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2014/10/21/通配符与正则表达式/">通配符与正则表达式</a>
+      <a class="article-title" href="/2014/10/23/Object-C之属性-Property/">Object-C之属性(Property)</a>
     </h1>
   
 
@@ -85,420 +85,100 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="1_通配符">1 通配符</h1>
+        <h1 id="Property">Property</h1>
 <ul>
-<li>通配符是系统级别的 ⽽而正则表达式需要相关⼯工具和语⾔的支持: egrep, awk, vi, perl。</li>
-<li>*当您键入 ls .txt 命令并按 Enter 后,寻找哪些文件同 .txt 模式相匹配的任务不是由 ls 命令,而 是由 shell 自己完成。这需要对命令行是如何被 shell 解析的作进一步解释。当您键入:</li>
-</ul>
-<h2 id="1-1通配符语法:*￼￼">1.1通配符语法:*￼￼</h2>
-<ul>
-<li><p>*将与零个或多个字符匹配。这就是说“什么都可以”。例子:</p>
-<pre><code>  /etc/g<span class="keyword">*</span> 与 /etc 中以 g 开头的所有⽂文件匹配。
-  /tmp/my<span class="keyword">*</span>.txt 与 /tmp 中以 my 开头,并且以 .txt 结尾的所有⽂文件匹配。
+<li><p>属性格式: @property(参数1,参数2) 类型 名字;</p>
+<pre><code>  <span class="variable">@property</span><span class="symbol">:</span>新的编译器指令,主要功能是为我们自动生成setter和getter方法的声明
+  <span class="variable">@synthesize</span><span class="symbol">:</span>与<span class="variable">@property</span>相对应的新的编译器功能.主要是为我们自动生成setter和getter方法的功能实现
+  属性都是基于变量的,编译器会自动为属性创建相对应的实例变量
 </code></pre></li>
-<li><p>该命令首先被分割成一系列单词(本例中的 ls 和 .txt)。当 shell 在某个单词中发现了 ,它会将 整个单词当作通配模式解析,并用所有相匹配的文件替换它。因此,该命令在执行前就变为 ls readme.txt recipe.txt,而这将得到期望的结果。</p>
-</li>
+<li>说明:Xcode4.5之后,直接@property就可以生成声明与实现</li>
 </ul>
-<h2 id="1-2通配符语法:?">1.2通配符语法:?</h2>
+<h1 id="点语法">点语法</h1>
 <ul>
-<li><p>? 与任何单个字符匹配。例子:</p>
-<pre><code>  myfile? 与⽂文件名为 myfile 后跟单个字符的任何⽂文件匹配。
-  <span class="regexp">/tmp/</span>notes?txt 将与 <span class="regexp">/tmp/</span>notes.txt 和 <span class="regexp">/tmp/</span>notes_txt 都匹配,如果它们存在。
+<li>使用了属性后,我们可以在需要使用setter和getter方法的地方使用点语法</li>
+<li>点语法只是调用setter和getter方法的便捷方式而已,无其他功能</li>
+<li>点语法出现在赋值符号(=)的左边表示调用setter方法,右边表示调用getter方法</li>
+</ul>
+<h1 id="名称的使用">名称的使用</h1>
+<ul>
+<li><p>格式:@synthesize name = variable;</p>
+<pre><code>  eg: <span class="variable">.h</span> <span class="keyword">@property</span> (<span class="keyword">copy</span>) <span class="built_in">NSString</span> *name;
+      <span class="variable">.m</span> <span class="keyword">@synthesize</span> name = appellation; <span class="comment">//appellation是成员变量</span>
 </code></pre></li>
 </ul>
-<h2 id="1-3通配符语法:[]_[!]">1.3通配符语法:[] [!]</h2>
+<h1 id="属性的参数">属性的参数</h1>
+<p>属性的参数主要分三类:</p>
 <ul>
-<li>该通配符与 ? 相似,但允许指定得更确切。要使用该通配符,把您想要匹配的所有字符放在 [] 内。结果的表达式将与 [] 中任一字符相匹配。您也可以用 - 来指定范围,甚至还可以组合范 围。</li>
-<li>[…]:同方括号中的任意一个字符相匹配。这些字符可以用字符范围(比如 1-9)或者离散值或同 时使用两者表示。例如:[a-zBE5-7] 同所有 a 到 z 之间的字符和 B、E、5、6、7 相匹配。</li>
-<li>[!…]:与所有不在方括号中的某个字符匹配。例如 [!a-z] 同某个非小写字母相匹配[5];例子:</li>
+<li>读写属性(readwrite/readonly)</li>
+<li>setter语义(assign/retain/copy)</li>
+<li>原子性(atomic/nonatomic)</li>
 </ul>
-<pre><code>    ￼myfile[<span class="number">12</span>] 将与 myfile1 和 myfile2 匹配。只要当前⺫⽬目录中⾄至少有⼀一个这样的⽂文件存在,该通 配符就可以进⾏行扩展。
-    <span class="keyword">ls</span> /etc/[<span class="number">0</span>-<span class="number">9</span>]* 将列出 /etc 中以数字开头的所有⽂文件。
-    <span class="keyword">ls</span> /tmp/[A-Za-<span class="keyword">z</span>]* 将列出 /tmp 中以⼤大写字⺟母或⼩小写字⺟母开头的所有⽂文件
-    rm myfile[!<span class="number">9</span>] 将删除除 myfile9 之外的名为 myfile 加⼀一个字符的所有⽂文件。
-</code></pre><ul>
-<li>{c1,c2}:同 c1 或者 c2 相匹配。其中 c1 和 c2 也是通配符。因此,您可以使用 {[0-9]*,[acr]}。</li>
+<h2 id="所有者属性">所有者属性</h2>
+<table>
+<thead>
+<tr>
+<th>属性值</th>
+<th>关键字</th>
+<th>所有权</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>strong</td>
+<td>__strong</td>
+<td>有</td>
+</tr>
+<tr>
+<td>unsafe_unretained</td>
+<td>__unsafe_unretained</td>
+<td>无</td>
+</tr>
+<tr>
+<td>weak</td>
+<td>__weak</td>
+<td>无</td>
+</tr>
+<tr>
+<td>copy</td>
+<td>__strong</td>
+<td>有</td>
+</tr>
+<tr>
+<td>assign</td>
+<td>__assign</td>
+<td>无</td>
+</tr>
+<tr>
+<td>retain</td>
+<td>__strong</td>
+<td>有</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>strong是IOS 5以后,retain是IOS 4之前,都表示持有对象,没区别</li>
+<li>weak比unsafe_unretained多了对象销毁后指针置nil,表示不持有对象</li>
+<li>assign用于基本数据类型</li>
+</ul>
+<h2 id="只读属性">只读属性</h2>
+<ul>
+<li>可以修改属性参数中的读写属性值为readonly</li>
+<li>这样将只生成一个getter方法而不会生成setter方法,但如果代码中调用了其setter方法,编译器会报错</li>
+</ul>
+<h2 id="重命名getter和setter方法">重命名getter和setter方法</h2>
+<ul>
+<li>格式: @property(getter=isHidden) BOOL hidden;</li>
 </ul>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/10/21/通配符与正则表达式/" data-id="tnfbgzr6xd3c2f2r" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2014/10/23/Object-C之属性-Property/" data-id="gww7smizecdjmupe" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/通配符与正则表达式/">通配符与正则表达式</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Object-C之属性-Property/">Object-C之属性(Property)</a></li></ul>
 
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-正则表达式和通配符" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2014/10/20/正则表达式和通配符/" class="article-date">
-  <time datetime="2014-10-20T13:34:43.000Z" itemprop="datePublished">Oct 20 2014</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2014/10/20/正则表达式和通配符/">正则表达式和通配符</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/10/20/正则表达式和通配符/" data-id="x05by1ha3vwlzzn6" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-通配符和正则表达式-1" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2014/10/20/通配符和正则表达式-1/" class="article-date">
-  <time datetime="2014-10-20T13:29:14.000Z" itemprop="datePublished">Oct 20 2014</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2014/10/20/通配符和正则表达式-1/">通配符和正则表达式</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/10/20/通配符和正则表达式-1/" data-id="psj7mmdygow72cs7" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-通配符和正则表达式" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2014/10/20/通配符和正则表达式/" class="article-date">
-  <time datetime="2014-10-20T13:26:43.000Z" itemprop="datePublished">Oct 20 2014</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2014/10/20/通配符和正则表达式/">通配符和正则表达式</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/10/20/通配符和正则表达式/" data-id="zhsp68yama7qbozn" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-object-c中谓词的使用" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2014/10/20/object-c中谓词的使用/" class="article-date">
-  <time datetime="2014-10-20T13:11:32.000Z" itemprop="datePublished">Oct 20 2014</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>title: object-c中谓词的使用<br>date: 2014-10-20 21:09:46</p>
-<h2 id="tags:Object-C中谓词的使用">tags:Object-C中谓词的使用</h2>
-<h1 id="Object-C中谓词的使用">Object-C中谓词的使用</h1>
-<h2 id="main-m">main.m</h2>
-<pre><code>    <span class="preprocessor">#import <span class="title">&lt;Foundation/Foundation.h&gt;</span></span>
-    <span class="preprocessor">#import <span class="title">"QYPerson.h"</span>            </span>
-    <span class="keyword">int</span> main(<span class="keyword">int</span> argc, <span class="keyword">const</span> <span class="keyword">char</span> * argv[])
-    {
-        <span class="keyword">@autoreleasepool</span> {
-
-            <span class="comment">// cocoa中的谓词，原理和用法都类似与SQL中where，相当与其过滤</span>
-
-            <span class="comment">// 0. 定义 (predicateWthFormat:...)</span>
-
-            <span class="comment">// 1. 谓词中的《关系运算符》的使用</span>
-            <span class="built_in">NSArray</span> *numArr = @[@<span class="number">12</span>, @<span class="number">34</span>, @<span class="number">128</span>, @<span class="number">99</span>, @<span class="number">3899</span>, @<span class="number">789</span>];
-
-            <span class="comment">// 1.1 创建谓词对象</span>
-            <span class="comment">// 过滤数组中大于100的数字</span>
-            <span class="comment">// 关系运算符：&gt;,&lt;,&gt;=,&lt;=,==,!=</span>
-            <span class="comment">// 谓词中，self代表应用谓词逻辑的对象本身</span>
-            NSPredicate *numPredicate = [NSPredicate predicateWithFormat:<span class="string">@"self &gt; 100"</span>];
-            <span class="comment">// 1.2 对数组使用谓词进行过滤</span>
-            <span class="built_in">NSArray</span> *numResult = [numArr filteredArrayUsingPredicate:numPredicate];
-            <span class="built_in">NSLog</span>(<span class="string">@"&gt;&gt;&gt;1:%@"</span>, numResult);
-
-            <span class="comment">// 2. 谓词中《逻辑运算符》的使用</span>
-            <span class="built_in">NSArray</span> *personArr = @[
-                           [QYPerson personWithName:<span class="string">@"niuer"</span> andAge:@<span class="number">20</span>],
-                           [QYPerson personWithName:<span class="string">@"zhangsan"</span> andAge:@<span class="number">30</span>],
-                           [QYPerson personWithName:<span class="string">@"lisi"</span> andAge:@<span class="number">40</span>],
-                           [QYPerson personWithName:<span class="string">@"wangwu"</span> andAge:@<span class="number">50</span>],
-                           [QYPerson personWithName:<span class="string">@"zhaoliu"</span> andAge:@<span class="number">60</span>],
-                           [QYPerson personWithName:<span class="string">@"tiANqi"</span> andAge:@<span class="number">70</span>],
-                           ];
-            <span class="comment">// 2.1</span>
-            <span class="comment">// 过滤数组中年龄&gt;40，并且名字不等于zhaoliude的对象</span>
-            <span class="comment">// 逻辑运算符：and或者&amp;&amp;代表与逻辑 or或者||代表或逻辑</span>
-            NSPredicate *personPredicate = [NSPredicate predicateWithFormat:<span class="string">@"age &gt; 40 and name != 'zhaoliu'"</span>];
-
-            <span class="comment">// 2.2</span>
-            <span class="built_in">NSArray</span> *personResult =[personArrfilteredArrayUsingPredicate:personPredicate];
-            <span class="built_in">NSLog</span>(<span class="string">@"&gt;&gt;&gt;2.%@"</span>, personResult);
-
-            <span class="comment">// 2.3</span>
-            <span class="comment">// ALL ANY</span>
-            NSPredicate *pre = [NSPredicate predicateWithFormat:<span class="string">@"ALL age &gt; 50"</span>];
-            <span class="keyword">if</span> ([pre evaluateWithObject:personArr]) {
-                <span class="built_in">NSLog</span>(<span class="string">@"evaluate OK."</span>);
-            } <span class="keyword">else</span> {
-                <span class="built_in">NSLog</span>(<span class="string">@"evaluate NOK."</span>);
-            }
-            pre = [NSPredicate predicateWithFormat:<span class="string">@"ANY age &lt; 50"</span>];
-            <span class="keyword">if</span> ([pre evaluateWithObject:personArr]) {
-                <span class="built_in">NSLog</span>(<span class="string">@"&gt;&gt;&gt;evaluate OK."</span>);
-            } <span class="keyword">else</span> {
-                <span class="built_in">NSLog</span>(<span class="string">@"&gt;&gt;&gt;evaluate NOK."</span>);
-            }
-
-            <span class="comment">// 3. 谓词中使用范围运算符: IN、BETWEEN</span>
-            <span class="comment">// 年龄在20岁到50岁之间 age &gt;=20 and age &lt;= 50 age, age between{20,50}</span>
-            personPredicate = [NSPredicate predicateWithFormat:<span class="string">@"age between {20, 50}"</span>];
-            personResult = [personArr filteredArrayUsingPredicate:personPredicate];
-            <span class="built_in">NSLog</span>(<span class="string">@"&gt;&gt;&gt;3:%@"</span>, personResult);
-
-            <span class="comment">// 4. 字符串使用谓词</span>
-            <span class="comment">// BEGINSWITH、ENDSWITH、CONTAINS [c]不区分大小写 [d]不区分发音符号 [cd]即不也不</span>
-            personPredicate = [NSPredicate predicateWithFormat:<span class="string">@"name beginswith[cd] 'zh'"</span>];
-            personResult = [personArr filteredArrayUsingPredicate:personPredicate];
-            <span class="built_in">NSLog</span>(<span class="string">@"&gt;&gt;&gt;4:%@"</span>, personResult);
-
-            personPredicate = [NSPredicate predicateWithFormat:<span class="string">@"name contains[cd] 'an'"</span>];
-            personResult = [personArr filteredArrayUsingPredicate:personPredicate];
-            <span class="built_in">NSLog</span>(<span class="string">@"&gt;&gt;&gt;4.2:%@"</span>, personResult);
-
-            <span class="comment">// 5. 谓词中通配符的使用</span>
-            <span class="comment">// ? *</span>
-            <span class="comment">// LIKE 也可以加[cd]</span>
-            <span class="comment">// 过滤数组，取出第三个字母为a的对象</span>
-            personPredicate = [NSPredicate predicateWithFormat:<span class="string">@"name LIKE[cd] '??a*'"</span>];
-            personResult = [personArr filteredArrayUsingPredicate:personPredicate];
-            <span class="built_in">NSLog</span>(<span class="string">@"&gt;&gt;&gt;5:%@"</span>, personResult);
-
-            <span class="comment">// 6. 谓词模版</span>
-            <span class="comment">// 6.1 键路径 %K</span>
-            <span class="built_in">NSString</span> *keyPath = <span class="string">@"age"</span>;
-            NSPredicate *predicate = [NSPredicate predicateWithFormat:<span class="string">@"%K &gt; %@"</span>, keyPath, @<span class="number">30</span>];
-            <span class="keyword">for</span> (QYPerson *person <span class="keyword">in</span> personArr) {
-                <span class="keyword">if</span> ([predicate evaluateWithObject:person]) {
-                    <span class="built_in">NSLog</span>(<span class="string">@"person:%@"</span>, person);
-                }
-            }
-            <span class="comment">// 6.2 变量 $</span>
-            NSPredicate *predicateTemplate = [NSPredicate predicateWithFormat:<span class="string">@"name == $NAME"</span>];
-            <span class="built_in">NSString</span> *name = <span class="string">@"zhangsan"</span>;
-
-            <span class="built_in">NSDictionary</span> *varDict = @{<span class="string">@"NAME"</span>:name};
-            predicate = [predicateTemplate predicateWithSubstitutionVariables:varDict];
-            <span class="keyword">for</span> (QYPerson *person <span class="keyword">in</span> personArr) {
-                <span class="keyword">if</span> ([predicate evaluateWithObject:person]) {
-                    <span class="built_in">NSLog</span>(<span class="string">@"&gt;&gt;&gt;person:%@"</span>, person);
-                }
-            }
-
-            <span class="built_in">NSArray</span> *betweens=[<span class="built_in">NSArray</span> arrayWithObjects:
-                       [<span class="built_in">NSNumber</span> numberWithInt:<span class="number">20</span>],
-                       [<span class="built_in">NSNumber</span> numberWithInt:<span class="number">50</span>],<span class="literal">nil</span>];
-            NSPredicate *predicateTemplate1 = [NSPredicate predicateWithFormat:<span class="string">@"age BETWEEN %@"</span>,betweens];
-            <span class="keyword">for</span> (QYPerson *person <span class="keyword">in</span> personArr) {
-
-                <span class="keyword">if</span> ([predicateTemplate1 evaluateWithObject:person]) {
-                    <span class="built_in">NSLog</span>(<span class="string">@"&gt;&gt;&gt;+++person:%@"</span>, person);
-                }
-            }
-        }
-        <span class="keyword">return</span> <span class="number">0</span>;
-    }
-</code></pre><h2 id="QYPerson-h">QYPerson.h</h2>
-<pre><code>    <span class="preprocessor">#import <span class="title">&lt;Foundation/Foundation.h&gt;</span></span>
-
-    <span class="class"><span class="keyword">@interface</span> <span class="title">QYPerson</span> : <span class="title">NSObject</span></span>
-    <span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">strong</span>) <span class="built_in">NSString</span> *name;
-    <span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">strong</span>) <span class="built_in">NSNumber</span> *age;
-    +(instancetype)personWithName:(<span class="built_in">NSString</span> *)name andAge:(<span class="built_in">NSNumber</span> *)age;
-
-    <span class="keyword">@end</span>
-</code></pre><h2 id="QYPerson-m">QYPerson.m</h2>
-<pre><code>    <span class="preprocessor">#import <span class="title">"QYPerson.h"</span></span>
-    <span class="class"><span class="keyword">@implementation</span> <span class="title">QYPerson</span></span>
-
-    +(instancetype)personWithName:(<span class="built_in">NSString</span> *)name andAge:(<span class="built_in">NSNumber</span> *)age
-    {
-        QYPerson *person = [[QYPerson alloc] init];
-        <span class="keyword">if</span> (person) {
-            person<span class="variable">.name</span> = name;
-            person<span class="variable">.age</span> = age;
-        }
-        <span class="keyword">return</span> person;
-    }
-
-    - (<span class="built_in">NSString</span> *)description
-    {
-        <span class="keyword">return</span> [<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"name:%@, age:%@"</span>, _name, _age];
-    }
-
-    <span class="keyword">@end</span>
-</code></pre>
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/10/20/object-c中谓词的使用/" data-id="fk99y85skjxk5s9l" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-test" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2014/10/20/test/" class="article-date">
-  <time datetime="2014-10-20T13:06:41.000Z" itemprop="datePublished">Oct 20 2014</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2014/10/20/test/">test</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>hello word</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/10/20/test/" data-id="g03gzy0xfc2pe3n6" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2014/10/20/hello-world/" class="article-date">
-  <time datetime="2014-10-20T12:48:55.000Z" itemprop="datePublished">Oct 20 2014</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2014/10/20/hello-world/">Hello World</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Welcome to <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="http://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="http://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">trobuleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick_Start">Quick Start</h2>
-<h3 id="Create_a_new_post">Create a new post</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-
-<p>More info: <a href="http://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run_server">Run server</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-
-<p>More info: <a href="http://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate_static_files">Generate static files</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-
-<p>More info: <a href="http://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy_to_remote_sites">Deploy to remote sites</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-
-<p>More info: <a href="http://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/10/20/hello-world/" data-id="je4c6tnazt3mgda9" class="article-share-link">Share</a>
-      
-      
     </footer>
   </div>
   
@@ -517,7 +197,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/通配符与正则表达式/">通配符与正则表达式</a><span class="tag-list-count">1</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Object-C之属性-Property/">Object-C之属性(Property)</a><span class="tag-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -526,7 +206,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/通配符与正则表达式/" style="font-size: NaNpx;">通配符与正则表达式</a>
+      <a href="/tags/Object-C之属性-Property/" style="font-size: 20.00px;">Object-C之属性(Property)</a><a href="/tags/通配符与正则表达式/" style="font-size: 10.00px;">通配符与正则表达式</a>
     </div>
   </div>
 
@@ -535,7 +215,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">October 2014</a><span class="archive-list-count">7</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">October 2014</a><span class="archive-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -547,23 +227,7 @@
       <ul>
         
           <li>
-            <a href="/2014/10/21/通配符与正则表达式/">通配符与正则表达式</a>
-          </li>
-        
-          <li>
-            <a href="/2014/10/20/正则表达式和通配符/">正则表达式和通配符</a>
-          </li>
-        
-          <li>
-            <a href="/2014/10/20/通配符和正则表达式-1/">通配符和正则表达式</a>
-          </li>
-        
-          <li>
-            <a href="/2014/10/20/通配符和正则表达式/">通配符和正则表达式</a>
-          </li>
-        
-          <li>
-            <a href="/2014/10/20/object-c中谓词的使用/">(no title)</a>
+            <a href="/2014/10/23/Object-C之属性-Property/">Object-C之属性(Property)</a>
           </li>
         
       </ul>
